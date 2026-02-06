@@ -1,0 +1,162 @@
+---
+const faqs = [
+  {
+    question: "What is Hanyu?",
+    answer: "Hanyu is your personal AI Chinese tutor that helps you master characters, tones, vocabulary, and pronunciation through smart practice. Think of it as a human tutor, but available 24/7 and far more affordable.",
+  },
+  {
+    question: "Who is Hanyu for?",
+    answer: "Hanyu is built for anyone who wants to learn Mandarin Chinese — from complete beginners to intermediate learners looking to level up. It's perfect for students, professionals, travelers, and anyone who wants to build real fluency with confidence.",
+  },
+  {
+    question: "How is Hanyu different from other Chinese apps?",
+    answer: "Most language apps focus on rote memorization or passive exercises. Hanyu helps you learn by actively practicing characters, tones, and vocabulary in context. With Hanyu, you get: smart flashcards that adapt to your level, character writing practice with stroke-order guidance, pronunciation tools for mastering tones, and a learning plan built just for you.",
+  },
+  {
+    question: "How much time can I practice with Hanyu?",
+    answer: "You can practice as much as you want — there are no daily or monthly limits. Hanyu is available 24/7, so you can learn anytime that fits your schedule.",
+  },
+  {
+    question: "Does Hanyu adapt to my level?",
+    answer: "Yes! Hanyu tailors its content and exercises based on your current level, learning pace, and goals — so you're always challenged at the right level without feeling overwhelmed.",
+  },
+];
+---
+
+<section class="faq-section" id="faq">
+  <div class="container">
+    <div class="faq-header reveal">
+      <span class="section-label">FAQ</span>
+      <h2>Questions &amp; Answers</h2>
+      <p class="faq-sub">Have more questions? Feel free to email us:<br/>
+        <a href="mailto:support@hanyu.app">support@hanyu.app</a>
+      </p>
+    </div>
+
+    <div class="faq-list reveal">
+      {faqs.map((faq, i) => (
+        <details class="faq-item">
+          <summary>
+            <span class="faq-number">{String(i + 1).padStart(2, '0')}</span>
+            <span class="faq-question">{faq.question}</span>
+            <svg class="faq-chevron" width="20" height="20" viewBox="0 0 20 20" fill="none" aria-hidden="true">
+              <path d="M5 8l5 5 5-5" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+            </svg>
+          </summary>
+          <div class="faq-answer">
+            <p>{faq.answer}</p>
+          </div>
+        </details>
+      ))}
+    </div>
+  </div>
+</section>
+
+<style>
+  .faq-section {
+    padding-block: var(--section-padding);
+  }
+
+  .faq-header {
+    text-align: center;
+    margin-bottom: 48px;
+  }
+
+  .faq-header h2 {
+    margin-bottom: 16px;
+  }
+
+  .faq-sub {
+    color: var(--color-text-secondary);
+    font-size: var(--size-body-lg);
+  }
+
+  .faq-sub a {
+    color: var(--color-primary);
+    font-weight: 500;
+    transition: color 0.15s ease;
+  }
+
+  .faq-sub a:hover {
+    color: var(--color-primary-dark);
+  }
+
+  .faq-list {
+    max-width: 720px;
+    margin-inline: auto;
+  }
+
+  /* ---- Accordion Item ---- */
+  .faq-item {
+    border-bottom: 1px solid rgba(0, 0, 0, 0.08);
+  }
+
+  .faq-item summary {
+    display: flex;
+    align-items: center;
+    gap: 16px;
+    padding: 24px 0;
+    cursor: pointer;
+    list-style: none;
+    user-select: none;
+  }
+
+  .faq-item summary::-webkit-details-marker {
+    display: none;
+  }
+
+  .faq-item summary::marker {
+    display: none;
+    content: '';
+  }
+
+  .faq-number {
+    font-size: 0.875rem;
+    font-weight: 600;
+    color: var(--color-primary);
+    flex-shrink: 0;
+    width: 28px;
+  }
+
+  .faq-question {
+    flex: 1;
+    font-size: 1.0625rem;
+    font-weight: 600;
+    color: var(--color-text);
+    line-height: 1.4;
+  }
+
+  .faq-chevron {
+    flex-shrink: 0;
+    color: var(--color-text-secondary);
+    transition: transform 0.25s ease;
+  }
+
+  .faq-item[open] .faq-chevron {
+    transform: rotate(180deg);
+  }
+
+  .faq-answer {
+    padding: 0 0 24px 44px;
+  }
+
+  .faq-answer p {
+    color: var(--color-text-secondary);
+    line-height: 1.7;
+  }
+
+  /* Hover */
+  .faq-item summary:hover .faq-question {
+    color: var(--color-primary);
+  }
+
+  @media (max-width: 768px) {
+    .faq-answer {
+      padding-left: 0;
+    }
+
+    .faq-number {
+      display: none;
+    }
+  }
+</style>
