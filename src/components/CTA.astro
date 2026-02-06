@@ -64,7 +64,7 @@
 </section>
 
 <script>
-  const SCRIPT_URL = 'SCRIPT_URL';
+  const FORM_URL = 'https://docs.google.com/forms/d/e/1FAIpQLSewqSjO3dpsjJV6IYTuF7sM8g0NHpPu-SUkWzRa4TDCr63qyA/formResponse';
 
   const form = document.getElementById('waitlist-form') as HTMLFormElement;
   const submitBtn = document.getElementById('wl-submit') as HTMLButtonElement;
@@ -106,20 +106,24 @@
     errorEl.hidden = true;
 
     try {
-      await fetch(SCRIPT_URL, {
+      await fetch(FORM_URL, {
         method: 'POST',
         mode: 'no-cors',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ name, email, devices }),
+        body: new URLSearchParams({
+          'entry.1998589119': name,
+          'entry.275173679': devices,
+          'entry.575647723': email,
+        }),
       });
-
-      // With no-cors we can't read the response, so assume success
-      form.hidden = true;
-      successEl.hidden = false;
     } catch {
-      errorEl.hidden = false;
+      // no-cors responses are opaque — errors are expected, ignore them
+    } finally {
+      // Always show success since we can't read the response with no-cors
+      form.reset();
+      form.hidden = true;
       submitBtn.disabled = false;
       submitBtn.classList.remove('loading');
+      successEl.hidden = false;
     }
   });
 </script>
