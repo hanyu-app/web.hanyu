@@ -47,11 +47,33 @@ const screenshots = [
     overflow-x: auto;
     -webkit-overflow-scrolling: touch;
     scrollbar-width: none;
+    padding-top: 12px;
     padding-bottom: 8px;
   }
 
   .scroll-track::-webkit-scrollbar {
     display: none;
+  }
+
+  .scroll-track::before,
+  .scroll-track::after {
+    content: '';
+    position: absolute;
+    top: 0;
+    bottom: 0;
+    width: 48px;
+    z-index: 1;
+    pointer-events: none;
+  }
+
+  .scroll-track::before {
+    left: 0;
+    background: linear-gradient(to right, var(--color-bg-alt), transparent);
+  }
+
+  .scroll-track::after {
+    right: 0;
+    background: linear-gradient(to left, var(--color-bg-alt), transparent);
   }
 
   .scroll-inner {
