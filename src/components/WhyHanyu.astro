@@ -1,0 +1,133 @@
+---
+const challenges = [
+  {
+    icon: `<svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M4 6h16M4 12h16M4 18h16" stroke="currentColor" stroke-width="2" stroke-linecap="round"/><circle cx="9" cy="6" r="2" fill="currentColor"/><circle cx="15" cy="12" r="2" fill="currentColor"/><circle cx="9" cy="18" r="2" fill="currentColor"/></svg>`,
+    challenge: 'Too many apps, none that stick',
+    answer: 'Hanyu combines dictionary lookup, character writing, and smart practice in one place — so you stop bouncing between apps and start making progress.',
+  },
+  {
+    icon: `<svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M12 20l-1.45-1.32C5.4 14.36 2 11.28 2 7.5 2 4.42 4.42 2 7.5 2c1.74 0 3.41.81 4.5 2.09C13.09 2.81 14.76 2 16.5 2 19.58 2 22 4.42 22 7.5c0 3.78-3.4 6.86-8.55 11.18L12 20z" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/><path d="M8 12l2 2 4-4" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>`,
+    challenge: 'Writing characters feels pointless',
+    answer: 'Hanyu teaches stroke order with real-time feedback and breaks characters into radicals, so every stroke builds understanding — not just muscle memory.',
+  },
+  {
+    icon: `<svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M12 1a3 3 0 0 0-3 3v8a3 3 0 0 0 6 0V4a3 3 0 0 0-3-3z" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/><path d="M19 10v2a7 7 0 0 1-14 0v-2" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/><line x1="12" y1="19" x2="12" y2="23" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg>`,
+    challenge: 'Your listening never improves',
+    answer: 'Pronunciation tools help you hear and produce tones accurately. You practice listening and speaking, not just reading and tapping.',
+  },
+  {
+    icon: `<svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M12 2L2 7l10 5 10-5-10-5z" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/><path d="M2 17l10 5 10-5" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/><path d="M2 12l10 5 10-5" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>`,
+    challenge: 'Content is too easy or too hard',
+    answer: "Hanyu adapts to your level automatically. You're always working at the edge of what you know — challenged but never overwhelmed.",
+  },
+  {
+    icon: `<svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M13 2L3 14h9l-1 8 10-12h-9l1-8z" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>`,
+    challenge: 'Studying feels like a chore',
+    answer: 'Short, varied sessions mix high-effort practice with satisfying progress tracking. When learning feels rewarding, you actually keep going.',
+  },
+  {
+    icon: `<svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M9 18V5l12-2v13" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/><circle cx="6" cy="18" r="3" stroke="currentColor" stroke-width="2"/><circle cx="18" cy="16" r="3" stroke="currentColor" stroke-width="2"/></svg>`,
+    challenge: 'Tones still trip you up',
+    answer: 'Tone practice is built into every exercise — not bolted on as an afterthought. You build tone awareness from day one.',
+  },
+];
+---
+
+<section class="why-hanyu" id="why-hanyu">
+  <div class="container">
+    <div class="why-header reveal">
+      <span class="section-label">Why Hanyu</span>
+      <h2>Built for how people actually learn Chinese</h2>
+      <p class="why-subtitle">We talked to real Mandarin learners about what works, what doesn't, and what they wish existed. Then we built it.</p>
+    </div>
+
+    <div class="challenge-grid">
+      {challenges.map((item) => (
+        <div class="challenge-card reveal">
+          <div class="challenge-icon" aria-hidden="true">
+            <Fragment set:html={item.icon} />
+          </div>
+          <h3 class="challenge-title">{item.challenge}</h3>
+          <p class="challenge-answer">{item.answer}</p>
+        </div>
+      ))}
+    </div>
+  </div>
+</section>
+
+<style>
+  .why-hanyu {
+    padding-block: var(--section-padding);
+    background-color: var(--color-bg-alt);
+  }
+
+  .why-header {
+    text-align: center;
+    max-width: 600px;
+    margin-inline: auto;
+    margin-bottom: 56px;
+  }
+
+  .why-header h2 {
+    margin-bottom: 16px;
+  }
+
+  .why-subtitle {
+    color: var(--color-text-secondary);
+    font-size: var(--size-body-lg);
+  }
+
+  .challenge-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 24px;
+  }
+
+  .challenge-card {
+    background: var(--color-bg);
+    border: 1px solid rgba(0, 0, 0, 0.06);
+    border-radius: 12px;
+    padding: 32px 28px;
+  }
+
+  .challenge-icon {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 44px;
+    height: 44px;
+    border-radius: 10px;
+    background-color: var(--color-primary-light);
+    color: var(--color-primary);
+    margin-bottom: 20px;
+  }
+
+  .challenge-title {
+    font-size: 1.125rem;
+    font-weight: 600;
+    margin-bottom: 12px;
+    line-height: 1.3;
+  }
+
+  .challenge-answer {
+    color: var(--color-text-secondary);
+    line-height: 1.7;
+  }
+
+  @media (max-width: 768px) {
+    .challenge-grid {
+      grid-template-columns: repeat(2, 1fr);
+      gap: 16px;
+    }
+
+    .challenge-card {
+      padding: 24px 20px;
+    }
+  }
+
+  @media (max-width: 480px) {
+    .challenge-grid {
+      grid-template-columns: 1fr;
+    }
+  }
+</style>
