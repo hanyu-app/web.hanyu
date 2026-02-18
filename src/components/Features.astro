@@ -5,24 +5,24 @@ const features = [
     title: 'Deep character insights',
     description:
       'Look up any word or character and get definitions, decompositions, character forms, and example words — all in one view.',
-    screenshot: '/screenshots/screen-6-search.webp',
-    alt: 'Search across lessons, grammar, dictionary, and quotes',
+    screenshot: '/screenshots/dict-definitions.webp',
+    alt: 'Dictionary tab showing definitions, character forms, and decomposition',
   },
   {
     label: 'Writing',
     title: 'Master stroke order',
     description:
       'Practice writing characters stroke by stroke with animated guides and instant feedback. Build muscle memory the right way.',
-    screenshot: '/screenshots/screen-3-character-detail.webp',
-    alt: 'Animated stroke order with speed controls and practice mode',
+    screenshot: '/screenshots/write-stroke-order.webp',
+    alt: 'Write tab showing stroke order animation and pinyin composition',
   },
   {
     label: 'Practice',
     title: 'Track your progress',
     description:
       'Test yourself with interactive practice sessions. Smart spaced repetition adapts to your memory so you never forget what you learn.',
-    screenshot: '/screenshots/screen-5-srs-review.webp',
-    alt: 'Spaced repetition review and progress tracking',
+    screenshot: '/screenshots/review-progress.webp',
+    alt: 'Review and progress screen with spaced repetition cards',
   },
 ];
 ---
@@ -43,8 +43,8 @@ const features = [
           <p>{f.description}</p>
         </div>
         <div class="feature-phone">
-          <div class="feature-card">
-            <img src={f.screenshot} srcset={`/screenshots/small/${f.screenshot.split('/').pop()} 280w, ${f.screenshot} 560w`} sizes="(max-width: 768px) 200px, 240px" alt={f.alt} width="280" height="607" loading="lazy" />
+          <div class="phone-mockup">
+            <img src={f.screenshot} srcset={`/screenshots/small/${f.screenshot.split('/').pop()} 280w, ${f.screenshot} 560w`} sizes="(max-width: 768px) 200px, 240px" alt={f.alt} width="280" height="606" loading="lazy" />
           </div>
         </div>
       </div>
@@ -109,17 +109,8 @@ const features = [
     justify-content: center;
   }
 
-  .feature-card {
+  .feature-phone .phone-mockup {
     width: 240px;
-    overflow: hidden;
-    border-radius: 1rem;
-    box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.15);
-  }
-
-  .feature-card img {
-    display: block;
-    width: 100%;
-    height: auto;
   }
 
   @media (max-width: 768px) {
@@ -134,7 +125,7 @@ const features = [
       direction: ltr;
     }
 
-    .feature-card {
+    .feature-phone .phone-mockup {
       width: 200px;
       margin-inline: auto;
     }
