@@ -20,14 +20,14 @@
     </div>
 
     <div class="hero-phones">
-      <div class="phone-mockup hero-phone-main">
-        <img src="/screenshots/home-screen.webp" srcset="/screenshots/small/home-screen.webp 280w, /screenshots/home-screen.webp 560w" sizes="(max-width: 768px) 200px, 220px" alt="Hanyu app home screen" width="280" height="606" loading="eager" fetchpriority="high" />
+      <div class="hero-card hero-phone-main">
+        <img src="/screenshots/screen-1-home-dashboard.webp" srcset="/screenshots/small/screen-1-home-dashboard.webp 280w, /screenshots/screen-1-home-dashboard.webp 560w" sizes="(max-width: 768px) 200px, 220px" alt="Hanyu app home screen" width="280" height="607" loading="eager" fetchpriority="high" />
       </div>
-      <div class="phone-mockup hero-phone-side hero-phone-left">
-        <img src="/screenshots/write-tab-animation.webp" srcset="/screenshots/small/write-tab-animation.webp 280w, /screenshots/write-tab-animation.webp 560w" sizes="(max-width: 768px) 160px, 180px" alt="Character writing practice" width="280" height="606" loading="eager" />
+      <div class="hero-card hero-phone-side hero-phone-left">
+        <img src="/screenshots/screen-3-character-detail.webp" srcset="/screenshots/small/screen-3-character-detail.webp 280w, /screenshots/screen-3-character-detail.webp 560w" sizes="(max-width: 768px) 160px, 180px" alt="Character writing practice" width="280" height="607" loading="eager" />
       </div>
-      <div class="phone-mockup hero-phone-side hero-phone-right">
-        <img src="/screenshots/dict-tab-definitions.webp" srcset="/screenshots/small/dict-tab-definitions.webp 280w, /screenshots/dict-tab-definitions.webp 560w" sizes="(max-width: 768px) 160px, 180px" alt="Dictionary definitions" width="280" height="606" loading="eager" />
+      <div class="hero-card hero-phone-side hero-phone-right">
+        <img src="/screenshots/screen-2-study-map.webp" srcset="/screenshots/small/screen-2-study-map.webp 280w, /screenshots/screen-2-study-map.webp 560w" sizes="(max-width: 768px) 160px, 180px" alt="Structured study lessons" width="280" height="607" loading="eager" />
       </div>
     </div>
   </div>
@@ -98,6 +98,18 @@
     align-items: flex-start;
     justify-content: center;
     min-height: 460px;
+  }
+
+  .hero-card {
+    overflow: hidden;
+    border-radius: 1rem;
+    box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.15);
+  }
+
+  .hero-card img {
+    display: block;
+    width: 100%;
+    height: auto;
   }
 
   .hero-phone-main {
