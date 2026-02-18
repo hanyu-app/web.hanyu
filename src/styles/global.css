@@ -75,9 +75,9 @@ ol {
 
 /* ===== Custom Properties ===== */
 :root {
-  --color-primary: #0061FF;
-  --color-primary-dark: #0050D4;
-  --color-primary-light: #e8f0fe;
+  --color-primary: #267B5E;
+  --color-primary-dark: #1B5C46;
+  --color-primary-light: #e8f5f0;
   --color-bg: #FFFFFF;
   --color-bg-alt: #F7F5F2;
   --color-text: #1E1919;
@@ -139,12 +139,12 @@ p {
 .btn-primary {
   background-color: var(--color-primary);
   color: #fff;
-  box-shadow: 0 4px 14px rgba(0, 97, 255, 0.3);
+  box-shadow: 0 4px 14px rgba(38, 123, 94, 0.3);
 }
 
 .btn-primary:hover {
   background-color: var(--color-primary-dark);
-  box-shadow: 0 6px 20px rgba(0, 97, 255, 0.4);
+  box-shadow: 0 6px 20px rgba(38, 123, 94, 0.4);
   transform: translateY(-1px);
 }
 

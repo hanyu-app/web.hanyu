@@ -86,7 +86,7 @@ const items = [...]
 ### Styling Conventions
 
 - **Global CSS custom properties** defined in `src/styles/global.css` under `:root`
-- **Color palette**: `--color-primary: #0061FF`, `--color-bg: #FFFFFF`, `--color-text: #1E1919`, `--color-text-secondary: #637381`, `--color-bg-alt: #F7F5F2`
+- **Color palette**: `--color-primary: #267B5E`, `--color-bg: #FFFFFF`, `--color-text: #1E1919`, `--color-text-secondary: #637381`, `--color-bg-alt: #F7F5F2`
 - **Typography**: Uses `clamp()` for fluid scaling (e.g., `--size-h1: clamp(2.5rem, 5.5vw, 3.75rem)`)
 - **Layout**: Max width `--max-width: 1200px`, section padding via `--section-padding`
 - **Responsive breakpoints**: 768px (tablet), 480px (mobile)
