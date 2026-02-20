@@ -35,6 +35,11 @@
 
     <div class="footer-bottom">
       <span class="copyright">&copy; 2026 Hanyu.app</span>
+      <div class="footer-badges">
+        <a href="https://dang.ai/" target="_blank" rel="noopener noreferrer">
+          <img src="https://cdn.prod.website-files.com/63d8afd87da01fb58ea3fbcb/6487e2868c6c8f93b4828827_dang-badge.png" alt="Dang.ai" width="150" height="54" loading="lazy" />
+        </a>
+      </div>
       <div class="footer-links">
         <a href="/privacy">Privacy</a>
         <a href="/terms">Terms</a>
@@ -110,6 +115,22 @@
   .copyright {
     font-size: 0.875rem;
     color: rgba(255, 255, 255, 0.5);
+  }
+
+  .footer-badges {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+  }
+
+  .footer-badges img {
+    display: block;
+    opacity: 0.6;
+    transition: opacity 0.15s ease;
+  }
+
+  .footer-badges img:hover {
+    opacity: 0.9;
   }
 
   .footer-links {
