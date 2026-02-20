@@ -1,5 +1,13 @@
 /* ===== Font ===== */
 @font-face {
+  font-family: 'Recoleta';
+  src: url('/fonts/recoleta-medium.otf') format('opentype');
+  font-weight: 500;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
   font-family: 'Origin';
   src: url('/fonts/origin-book.woff2') format('woff2'),
        url('/fonts/origin-book.woff') format('woff');
@@ -83,7 +91,7 @@ ol {
   --color-text: #1E1919;
   --color-text-secondary: #637381;
 
-  --font-heading: 'Origin', system-ui, -apple-system, sans-serif;
+  --font-heading: 'Recoleta', 'Origin', system-ui, -apple-system, sans-serif;
   --font-body: 'Origin', system-ui, -apple-system, sans-serif;
 
   --size-h1: clamp(2.5rem, 5.5vw, 3.75rem);
@@ -103,7 +111,7 @@ ol {
 /* ===== Global Typography ===== */
 h1, h2, h3, h4, h5, h6 {
   font-family: var(--font-heading);
-  font-weight: 700;
+  font-weight: 500;
   letter-spacing: -0.02em;
   line-height: 1.15;
 }
