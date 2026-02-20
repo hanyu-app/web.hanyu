@@ -17,6 +17,11 @@ const {
 } = Astro.props;
 
 const canonicalURL = new URL(Astro.url.pathname, Astro.site);
+
+// Compute dynamic OG image URL based on current page
+const pathname = Astro.url.pathname.replace(/^\/|\/$/g, ''); // strip slashes
+const ogSlug = pathname || 'index';
+const ogImageURL = new URL(`/og/${ogSlug}.png`, Astro.site).href;
 ---
 
 <!doctype html>
@@ -37,17 +42,17 @@ const canonicalURL = new URL(Astro.url.pathname, Astro.site);
     <meta property="og:url" content={canonicalURL.href} />
     <meta property="og:locale" content="en_US" />
     <meta property="og:site_name" content="Hanyu" />
-    <meta property="og:image" content="https://hanyu.app/og-image.png" />
-    <meta property="og:image:width" content="1200" />
-    <meta property="og:image:height" content="630" />
-    <meta property="og:image:alt" content="Hanyu — Learn Chinese naturally on iPhone, iPad, and Android. Join the waitlist today." />
+    <meta property="og:image" content={ogImageURL} />
+    <meta property="og:image:width" content="2400" />
+    <meta property="og:image:height" content="1260" />
+    <meta property="og:image:alt" content={title} />
 
     <!-- Twitter Card -->
     <meta name="twitter:card" content="summary_large_image" />
     <meta name="twitter:title" content={title} />
     <meta name="twitter:description" content={description} />
-    <meta name="twitter:image" content="https://hanyu.app/og-image.png" />
-    <meta name="twitter:image:alt" content="Hanyu — Learn Chinese naturally on iPhone, iPad, and Android. Join the waitlist today." />
+    <meta name="twitter:image" content={ogImageURL} />
+    <meta name="twitter:image:alt" content={title} />
 
     <!-- Favicon -->
     <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
