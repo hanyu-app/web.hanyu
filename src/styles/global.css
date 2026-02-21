@@ -9,8 +9,7 @@
 
 @font-face {
   font-family: 'Origin';
-  src: url('/fonts/origin-book.woff2') format('woff2'),
-       url('/fonts/origin-book.woff') format('woff');
+  src: url('/fonts/origin-regular.woff2') format('woff2');
   font-weight: 400;
   font-style: normal;
   font-display: swap;
@@ -18,18 +17,16 @@
 
 @font-face {
   font-family: 'Origin';
-  src: url('/fonts/origin-regular.woff2') format('woff2'),
-       url('/fonts/origin-regular.woff') format('woff');
-  font-weight: 500;
+  src: url('/fonts/origin-semibold.woff2') format('woff2');
+  font-weight: 600;
   font-style: normal;
   font-display: swap;
 }
 
 @font-face {
   font-family: 'Origin';
-  src: url('/fonts/origin-semibold.woff2') format('woff2'),
-       url('/fonts/origin-semibold.woff') format('woff');
-  font-weight: 600;
+  src: url('/fonts/origin-bold.woff2') format('woff2');
+  font-weight: 700;
   font-style: normal;
   font-display: swap;
 }
