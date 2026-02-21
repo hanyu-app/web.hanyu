@@ -41,7 +41,6 @@
 }
 
 html {
-  -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
   scroll-behavior: smooth;
 }
@@ -49,7 +48,13 @@ html {
 body {
   font-family: 'Origin', system-ui, -apple-system, sans-serif;
   font-size: 16px;
-  line-height: 1.6;
+  font-weight: 400;
+  line-height: 1.2;
+  font-kerning: normal;
+  font-feature-settings: "kern";
+  text-rendering: optimizeLegibility;
+  overflow-wrap: break-word;
+  -webkit-font-smoothing: antialiased;
   color: var(--color-text);
   background-color: var(--color-bg);
   overflow-x: hidden;
@@ -94,8 +99,8 @@ ol {
   --size-h1: clamp(2.5rem, 5.5vw, 3.75rem);
   --size-h2: clamp(1.75rem, 3.5vw, 2.5rem);
   --size-h3: clamp(1.25rem, 2vw, 1.5rem);
-  --size-body: 1rem;
-  --size-body-lg: 1.125rem;
+  --size-body: 0.875rem;
+  --size-body-lg: 1rem;
 
   --max-width: 1200px;
   --section-padding: clamp(64px, 8vw, 96px);
