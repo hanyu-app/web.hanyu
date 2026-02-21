@@ -80,7 +80,7 @@ export async function generateOgImage({ title, subtitle, isHome = false }: OgIma
           letterSpacing: '-0.01em',
           marginBottom: 14,
         },
-      }, 'Join the Waitlist'),
+      }, 'Download Now'),
       h('div', {
         style: {
           fontFamily: 'Origin',
@@ -89,7 +89,7 @@ export async function generateOgImage({ title, subtitle, isHome = false }: OgIma
           color: 'rgba(255, 255, 255, 0.55)',
           letterSpacing: '0.02em',
         },
-      }, 'Available on iPhone, iPad, and Android'),
+      }, 'Available on iPhone and iPad. Android coming soon.'),
     );
   } else {
     // Subpages: page title + optional subtitle
