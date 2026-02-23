@@ -62,9 +62,9 @@ const ogImageURL = new URL(`/og/${ogSlug}.png`, Astro.site).href;
     <link rel="apple-touch-icon" href="/apple-touch-icon.png" />
     <meta name="theme-color" content="#267B5E" />
 
-    <!-- Fonts: Recoleta for headings, Origin for body -->
-    <link rel="preload" href="/fonts/recoleta-medium.otf" as="font" type="font/otf" crossorigin />
-    <link rel="preload" href="/fonts/origin-regular.woff2" as="font" type="font/woff2" crossorigin />
+    <!-- Fonts: Sharp Grotesk for headings, Salesforce Sans for body -->
+    <link rel="preload" href="/fonts/sharp-grotesk-medium.woff2" as="font" type="font/woff2" crossorigin />
+    <link rel="preload" href="/fonts/salesforce-sans-regular.woff2" as="font" type="font/woff2" crossorigin />
 
     <!-- Structured Data -->
     {jsonLd && <script type="application/ld+json" set:html={JSON.stringify(jsonLd)} />}

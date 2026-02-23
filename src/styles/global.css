@@ -1,31 +1,39 @@
 /* ===== Font ===== */
 @font-face {
-  font-family: 'Recoleta';
-  src: url('/fonts/recoleta-medium.otf') format('opentype');
+  font-family: 'Sharp Grotesk';
+  src: url('/fonts/sharp-grotesk-medium.woff2') format('woff2');
   font-weight: 500;
   font-style: normal;
   font-display: swap;
 }
 
 @font-face {
-  font-family: 'Origin';
-  src: url('/fonts/origin-regular.woff2') format('woff2');
-  font-weight: 400;
-  font-style: normal;
-  font-display: swap;
-}
-
-@font-face {
-  font-family: 'Origin';
-  src: url('/fonts/origin-semibold.woff2') format('woff2');
+  font-family: 'Sharp Grotesk';
+  src: url('/fonts/sharp-grotesk-semibold.woff2') format('woff2');
   font-weight: 600;
   font-style: normal;
   font-display: swap;
 }
 
 @font-face {
-  font-family: 'Origin';
-  src: url('/fonts/origin-bold.woff2') format('woff2');
+  font-family: 'Salesforce Sans';
+  src: url('/fonts/salesforce-sans-light.woff2') format('woff2');
+  font-weight: 300;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: 'Salesforce Sans';
+  src: url('/fonts/salesforce-sans-regular.woff2') format('woff2');
+  font-weight: 400;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: 'Salesforce Sans';
+  src: url('/fonts/salesforce-sans-bold.woff2') format('woff2');
   font-weight: 700;
   font-style: normal;
   font-display: swap;
@@ -46,7 +54,7 @@ html {
 }
 
 body {
-  font-family: 'Origin', system-ui, -apple-system, sans-serif;
+  font-family: 'Salesforce Sans', system-ui, -apple-system, sans-serif;
   font-size: 16px;
   font-weight: 400;
   line-height: 1.2;
@@ -93,8 +101,8 @@ ol {
   --color-text: #1E1919;
   --color-text-secondary: #637381;
 
-  --font-heading: 'Recoleta', 'Origin', system-ui, -apple-system, sans-serif;
-  --font-body: 'Origin', system-ui, -apple-system, sans-serif;
+  --font-heading: 'Sharp Grotesk', 'Salesforce Sans', system-ui, -apple-system, sans-serif;
+  --font-body: 'Salesforce Sans', system-ui, -apple-system, sans-serif;
 
   --size-h1: clamp(2.5rem, 5.5vw, 3.75rem);
   --size-h2: clamp(1.75rem, 3.5vw, 2.5rem);
