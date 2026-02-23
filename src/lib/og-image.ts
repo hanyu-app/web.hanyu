@@ -3,9 +3,9 @@ import { Resvg } from '@resvg/resvg-js';
 import fs from 'node:fs';
 
 // Load fonts once at module level
-const recoletaFont = fs.readFileSync('./public/fonts/recoleta-medium.otf');
-const originBookFont = fs.readFileSync('./public/fonts/origin-book.woff');
-const originSemiboldFont = fs.readFileSync('./public/fonts/origin-semibold.woff');
+const sharpGroteskMedium = fs.readFileSync('./public/fonts/sharp-grotesk-medium.ttf');
+const salesforceSansRegular = fs.readFileSync('./public/fonts/salesforce-sans-regular.ttf');
+const salesforceSansBold = fs.readFileSync('./public/fonts/salesforce-sans-bold.ttf');
 
 // Logo mark as PNG data URI (pre-rendered with filters intact)
 const logoPng = fs.readFileSync('./public/logo.png');
@@ -41,7 +41,7 @@ export async function generateOgImage({ title, subtitle, isHome = false }: OgIma
     // Wordmark
     h('div', {
       style: {
-        fontFamily: 'Recoleta',
+        fontFamily: 'Sharp Grotesk',
         fontWeight: 500,
         fontSize: 54,
         color: '#ffffff',
@@ -57,7 +57,7 @@ export async function generateOgImage({ title, subtitle, isHome = false }: OgIma
     children.push(
       h('div', {
         style: {
-          fontFamily: 'Origin',
+          fontFamily: 'Salesforce Sans',
           fontWeight: 400,
           fontSize: 21,
           color: 'rgba(255, 255, 255, 0.75)',
@@ -73,7 +73,7 @@ export async function generateOgImage({ title, subtitle, isHome = false }: OgIma
           padding: '14px 36px',
           backgroundColor: '#ffffff',
           color: '#267B5E',
-          fontFamily: 'Origin',
+          fontFamily: 'Salesforce Sans',
           fontWeight: 600,
           fontSize: 18,
           borderRadius: 8,
@@ -83,7 +83,7 @@ export async function generateOgImage({ title, subtitle, isHome = false }: OgIma
       }, 'Download Now'),
       h('div', {
         style: {
-          fontFamily: 'Origin',
+          fontFamily: 'Salesforce Sans',
           fontWeight: 400,
           fontSize: 14,
           color: 'rgba(255, 255, 255, 0.55)',
@@ -96,7 +96,7 @@ export async function generateOgImage({ title, subtitle, isHome = false }: OgIma
     children.push(
       h('div', {
         style: {
-          fontFamily: 'Origin',
+          fontFamily: 'Salesforce Sans',
           fontWeight: 400,
           fontSize: 21,
           color: 'rgba(255, 255, 255, 0.75)',
@@ -109,7 +109,7 @@ export async function generateOgImage({ title, subtitle, isHome = false }: OgIma
       children.push(
         h('div', {
           style: {
-            fontFamily: 'Origin',
+            fontFamily: 'Salesforce Sans',
             fontWeight: 400,
             fontSize: 14,
             color: 'rgba(255, 255, 255, 0.5)',
@@ -147,9 +147,9 @@ export async function generateOgImage({ title, subtitle, isHome = false }: OgIma
     width: 1200,
     height: 630,
     fonts: [
-      { name: 'Recoleta', data: recoletaFont, weight: 500, style: 'normal' as const },
-      { name: 'Origin', data: originBookFont, weight: 400, style: 'normal' as const },
-      { name: 'Origin', data: originSemiboldFont, weight: 600, style: 'normal' as const },
+      { name: 'Sharp Grotesk', data: sharpGroteskMedium, weight: 500, style: 'normal' as const },
+      { name: 'Salesforce Sans', data: salesforceSansRegular, weight: 400, style: 'normal' as const },
+      { name: 'Salesforce Sans', data: salesforceSansBold, weight: 700, style: 'normal' as const },
     ],
   });
 
