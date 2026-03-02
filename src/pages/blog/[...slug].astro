@@ -1,0 +1,477 @@
+---
+import { readFileSync } from 'node:fs';
+import { join } from 'node:path';
+import { getCollection, render } from 'astro:content';
+import Layout from '../../layouts/Layout.astro';
+import Navbar from '../../components/Navbar.astro';
+import Footer from '../../components/Footer.astro';
+
+export async function getStaticPaths() {
+  const posts = await getCollection('blog', ({ data }) => !data.draft);
+  return posts.map((post) => ({
+    params: { slug: post.id },
+    props: { post },
+  }));
+}
+
+const { post } = Astro.props;
+const { Content } = await render(post);
+
+const wordCount = post.body ? post.body.split(/\s+/).length : 0;
+const readingTime = Math.max(1, Math.ceil(wordCount / 200));
+
+// Detect image orientation from PNG header (width at byte 16, height at byte 20)
+let imageIsLandscape = false;
+if (post.data.image) {
+  try {
+    const buf = readFileSync(join(process.cwd(), 'public', post.data.image));
+    const w = buf.readUInt32BE(16);
+    const h = buf.readUInt32BE(20);
+    imageIsLandscape = w > h;
+  } catch {}
+}
+
+const jsonLd = {
+  '@context': 'https://schema.org',
+  '@type': 'Article',
+  headline: post.data.title,
+  description: post.data.description,
+  datePublished: post.data.publishDate.toISOString(),
+  author: {
+    '@type': 'Organization',
+    name: 'Hanyu',
+    url: 'https://hanyu.app',
+  },
+};
+---
+
+<Layout title={`${post.data.title} — Hanyu`} description={post.data.description} jsonLd={jsonLd}>
+  <Navbar />
+  <main class="blog-post">
+    <!-- Hero header -->
+    <div class="post-hero">
+      <div class="container">
+        <a href="/blog" class="back-link">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+            <line x1="19" y1="12" x2="5" y2="12" />
+            <polyline points="12 19 5 12 12 5" />
+          </svg>
+          Back to blog
+        </a>
+
+        <header class="post-header">
+          {post.data.category && (
+            <span class="post-category">{post.data.category}</span>
+          )}
+          <h1>{post.data.title}</h1>
+          <p class="post-description">{post.data.description}</p>
+          <div class="post-meta">
+            <time datetime={post.data.publishDate.toISOString()}>
+              {post.data.publishDate.toLocaleDateString('en-US', {
+                year: 'numeric',
+                month: 'long',
+                day: 'numeric',
+              })}
+            </time>
+            <span class="meta-separator" aria-hidden="true">&middot;</span>
+            <span>{readingTime} min read</span>
+          </div>
+        </header>
+
+        {post.data.heroImage && (
+          <div class="post-hero-image">
+            <img src={post.data.heroImage} alt="" />
+          </div>
+        )}
+      </div>
+    </div>
+
+    <!-- Article body -->
+    <div class="container">
+      <article class="prose">
+        <Content />
+
+        {post.data.image && (
+          <figure class:list={['app-preview', { 'app-preview--landscape': imageIsLandscape }]}>
+            <div class="app-preview-image">
+              <img src={post.data.image} alt={`Hanyu app — ${post.data.title}`} loading="lazy" />
+            </div>
+            <figcaption class="app-preview-text">
+              <span class="app-preview-badge">Hanyu App</span>
+              <p>See how this works in practice — from characters to conversation.</p>
+              <a class="app-preview-cta" href="https://apps.apple.com/vn/app/hanyu-app/id6759315453" target="_blank" rel="noopener noreferrer">
+                Download free
+                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M7 17l9.2-9.2M17 17V7H7" /></svg>
+              </a>
+            </figcaption>
+          </figure>
+        )}
+      </article>
+    </div>
+  </main>
+  <Footer />
+</Layout>
+
+<style>
+  .blog-post .container {
+    max-width: 720px;
+  }
+
+  /* ── Hero Section ────────────────────────────────────────── */
+  .post-hero {
+    background: var(--color-bg-alt);
+    padding-top: clamp(32px, 4vw, 48px);
+    padding-bottom: clamp(40px, 5vw, 56px);
+    margin-bottom: clamp(40px, 5vw, 56px);
+  }
+
+  /* ── Back Link ───────────────────────────────────────────── */
+  .back-link {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    font-size: 14px;
+    font-weight: 700;
+    color: var(--color-text-secondary);
+    padding: 8px 16px;
+    border-radius: 14px;
+    background: var(--color-bg);
+    border: 1px solid rgba(0, 0, 0, 0.06);
+    box-shadow: none;
+    transition: box-shadow 0.15s ease, transform 0.1s ease;
+    margin-bottom: 32px;
+  }
+
+  .back-link:hover {
+    box-shadow: 0 2px 6px rgba(0, 0, 0, 0.06);
+    transform: translateY(-1px);
+  }
+
+  .back-link:focus-visible {
+    outline: 2px solid var(--color-primary);
+    outline-offset: 2px;
+  }
+
+  /* ── Post Header ─────────────────────────────────────────── */
+  .post-header {
+    margin-bottom: 32px;
+  }
+
+  .post-category {
+    display: inline-flex;
+    align-items: center;
+    font-size: 10px;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.3px;
+    color: var(--color-primary);
+    background: var(--color-bg);
+    padding: 3px 8px;
+    border-radius: 8px;
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.04);
+    margin-bottom: 16px;
+  }
+
+  .post-header h1 {
+    font-size: clamp(1.75rem, 3.5vw, 2.25rem);
+    line-height: 1.2;
+    margin-bottom: 16px;
+  }
+
+  .post-description {
+    color: var(--color-text-secondary);
+    font-size: var(--size-body-lg);
+    line-height: 1.6;
+    margin-bottom: 12px;
+    max-width: 540px;
+  }
+
+  .post-meta {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    font-size: 13px;
+    color: var(--color-text-secondary);
+  }
+
+  .meta-separator {
+    opacity: 0.5;
+  }
+
+  /* ── Hero Image ──────────────────────────────────────────── */
+  .post-hero-image {
+    border-radius: 24px;
+    overflow: hidden;
+    box-shadow: 0 2px 12px rgba(0, 0, 0, 0.04);
+  }
+
+  .post-hero-image img {
+    width: 100%;
+    aspect-ratio: 16 / 9;
+    object-fit: cover;
+    display: block;
+  }
+
+  /* ── Prose (article body) ────────────────────────────────── */
+  .prose {
+    padding-bottom: var(--section-padding);
+  }
+
+  .prose :global(h2) {
+    margin-top: 40px;
+    margin-bottom: 16px;
+    font-size: var(--size-h3);
+  }
+
+  .prose :global(h3) {
+    margin-top: 32px;
+    margin-bottom: 12px;
+  }
+
+  .prose :global(p) {
+    color: var(--color-text-secondary);
+    margin-bottom: 16px;
+    line-height: 1.7;
+  }
+
+  .prose :global(ul),
+  .prose :global(ol) {
+    list-style: disc;
+    padding-left: 24px;
+    margin-bottom: 16px;
+  }
+
+  .prose :global(ol) {
+    list-style: decimal;
+  }
+
+  .prose :global(li) {
+    color: var(--color-text-secondary);
+    margin-bottom: 8px;
+    line-height: 1.6;
+  }
+
+  .prose :global(a) {
+    color: var(--color-primary);
+    text-decoration: underline;
+    text-underline-offset: 2px;
+  }
+
+  .prose :global(a:hover) {
+    color: var(--color-primary-dark);
+  }
+
+  .prose :global(a:focus-visible) {
+    outline: 2px solid var(--color-primary);
+    outline-offset: 2px;
+    border-radius: 2px;
+  }
+
+  .prose :global(strong) {
+    color: var(--color-text);
+  }
+
+  .prose :global(blockquote) {
+    border-left: 3px solid var(--color-primary);
+    padding: 12px 16px;
+    margin-bottom: 16px;
+    font-style: italic;
+    background: var(--color-bg-alt);
+    border-radius: 0 14px 14px 0;
+  }
+
+  .prose :global(code) {
+    font-size: 0.875em;
+    background: color-mix(in srgb, var(--color-primary) 10%, transparent);
+    color: var(--color-primary);
+    padding: 1px 5px;
+    border-radius: 4px;
+  }
+
+  .prose :global(pre) {
+    background: var(--color-bg-alt);
+    padding: 16px;
+    border-radius: 14px;
+    overflow-x: auto;
+    margin-bottom: 16px;
+    box-shadow: inset 1px 1px 3px rgba(0, 0, 0, 0.05), inset -1px -1px 3px rgba(255, 255, 255, 0.5);
+  }
+
+  .prose :global(pre code) {
+    background: none;
+    padding: 0;
+  }
+
+  .prose :global(hr) {
+    border: none;
+    height: 1px;
+    background: rgba(0, 0, 0, 0.06);
+    margin: 32px 0;
+  }
+
+  .prose :global(img) {
+    border-radius: 24px;
+    margin-bottom: 16px;
+    box-shadow: 0 2px 12px rgba(0, 0, 0, 0.04);
+  }
+
+  .prose :global(table) {
+    width: 100%;
+    border-collapse: collapse;
+    margin-bottom: 16px;
+    font-size: 14px;
+  }
+
+  .prose :global(th) {
+    font-size: 10px;
+    font-weight: 700;
+    letter-spacing: 1px;
+    text-transform: uppercase;
+    color: var(--color-text-secondary);
+    text-align: left;
+    padding: 8px;
+    border-bottom: 1px solid rgba(0, 0, 0, 0.06);
+  }
+
+  .prose :global(td) {
+    padding: 8px;
+    border-bottom: 1px solid rgba(0, 0, 0, 0.06);
+    color: var(--color-text-secondary);
+    vertical-align: top;
+    line-height: 1.5;
+  }
+
+  .prose :global(tr:hover td) {
+    background: color-mix(in srgb, var(--color-primary) 4%, transparent);
+  }
+
+  .prose :global(tr:last-child td) {
+    border-bottom: none;
+  }
+
+  /* ── App Preview (in-article screenshot) ──────────────── */
+  .app-preview {
+    margin-top: 40px;
+    margin-bottom: 0;
+    background: var(--color-primary-dark);
+    border-radius: 24px;
+    padding: 24px;
+    display: flex;
+    align-items: center;
+    gap: 24px;
+  }
+
+  /* Portrait: image right, text left */
+  .app-preview-image {
+    flex: 0 0 auto;
+    width: 200px;
+    max-height: 280px;
+    border-radius: 14px;
+    overflow: hidden;
+    box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3);
+    order: 1;
+  }
+
+  .app-preview-image img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    object-position: top;
+    display: block;
+    margin-bottom: 0;
+  }
+
+  .app-preview-text {
+    flex: 1;
+    min-width: 0;
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+  }
+
+  .app-preview-badge {
+    display: inline-flex;
+    align-items: center;
+    width: fit-content;
+    font-size: 10px;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    color: rgba(255, 255, 255, 0.5);
+    background: rgba(255, 255, 255, 0.1);
+    padding: 3px 10px;
+    border-radius: 8px;
+  }
+
+  .app-preview-text p {
+    color: rgba(255, 255, 255, 0.8);
+    font-size: 15px;
+    line-height: 1.5;
+    margin: 0;
+  }
+
+  .app-preview-cta {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    font-size: 14px;
+    font-weight: 700;
+    color: var(--color-primary-dark);
+    background: #fff;
+    padding: 10px 24px;
+    border-radius: 9999px;
+    text-decoration: none;
+    transition: transform 0.1s ease, box-shadow 0.15s ease;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.15);
+  }
+
+  .app-preview-cta:hover {
+    transform: translateY(-1px);
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+  }
+
+  .app-preview-cta:focus-visible {
+    outline: 2px solid #fff;
+    outline-offset: 4px;
+    border-radius: 4px;
+  }
+
+  /* Landscape: stacked (image on top, text below) */
+  .app-preview--landscape {
+    flex-direction: column;
+    text-align: center;
+  }
+
+  .app-preview--landscape .app-preview-image {
+    width: 100%;
+    max-width: 480px;
+    order: 0;
+  }
+
+  .app-preview--landscape .app-preview-text {
+    align-items: center;
+  }
+
+  .app-preview--landscape .app-preview-badge {
+    margin: 0 auto;
+  }
+
+  /* Mobile: always stack */
+  @media (max-width: 600px) {
+    .app-preview {
+      flex-direction: column;
+      text-align: center;
+      padding: 20px;
+      gap: 16px;
+    }
+
+    .app-preview-image {
+      width: 180px;
+      order: 0;
+    }
+
+    .app-preview-text {
+      align-items: center;
+    }
+  }
+</style>
