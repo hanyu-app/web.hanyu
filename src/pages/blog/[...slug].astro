@@ -7,15 +7,22 @@ import Navbar from '../../components/Navbar.astro';
 import Footer from '../../components/Footer.astro';
 
 export async function getStaticPaths() {
-  const posts = await getCollection('blog', ({ data }) => !data.draft);
-  return posts.map((post) => ({
+  const allPosts = (await getCollection('blog', ({ data }) => !data.draft))
+    .sort((a, b) => b.data.publishDate.valueOf() - a.data.publishDate.valueOf());
+
+  return allPosts.map((post, i) => ({
     params: { slug: post.id },
-    props: { post },
+    props: {
+      post,
+      prevPost: allPosts[i + 1] ?? null,
+      nextPost: allPosts[i - 1] ?? null,
+    },
   }));
 }
 
-const { post } = Astro.props;
-const { Content } = await render(post);
+const { post, prevPost, nextPost } = Astro.props;
+const { Content, headings } = await render(post);
+const tocHeadings = headings.filter((h) => h.depth === 2);
 
 const wordCount = post.body ? post.body.split(/\s+/).length : 0;
 const readingTime = Math.max(1, Math.ceil(wordCount / 200));
@@ -86,35 +93,132 @@ const jsonLd = {
       </div>
     </div>
 
-    <!-- Article body -->
-    <div class="container">
-      <article class="prose">
-        <Content />
+    <!-- Article body + TOC sidebar -->
+    <div class="article-layout">
+      <div class="article-main">
+        <article class="prose">
+          <Content />
 
-        {post.data.image && (
-          <figure class:list={['app-preview', { 'app-preview--landscape': imageIsLandscape }]}>
-            <div class="app-preview-image">
-              <img src={post.data.image} alt={`Hanyu app — ${post.data.title}`} loading="lazy" />
+          {post.data.image && (
+            <figure class:list={['app-preview', { 'app-preview--landscape': imageIsLandscape }]}>
+              <div class="app-preview-image">
+                <img src={post.data.image} alt={`Hanyu app — ${post.data.title}`} loading="lazy" />
+              </div>
+              <figcaption class="app-preview-text">
+                <span class="app-preview-badge">Hanyu App</span>
+                <p>See how this works in practice — from characters to conversation.</p>
+                <a class="app-preview-cta" href="https://apps.apple.com/vn/app/hanyu-app/id6759315453" target="_blank" rel="noopener noreferrer">
+                  Download free
+                  <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M7 17l9.2-9.2M17 17V7H7" /></svg>
+                </a>
+              </figcaption>
+            </figure>
+          )}
+        </article>
+
+        <!-- Next / Previous -->
+        {(prevPost || nextPost) && (
+          <nav class="post-nav" aria-label="Article navigation">
+            <span class="post-nav-label">Continue reading</span>
+            <div class="post-nav-links">
+              {prevPost ? (
+                <a href={`/blog/${prevPost.id}`} class="post-nav-card">
+                  <span class="post-nav-dir">
+                    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><line x1="19" y1="12" x2="5" y2="12" /><polyline points="12 19 5 12 12 5" /></svg>
+                    Previous
+                  </span>
+                  <span class="post-nav-title">{prevPost.data.title}</span>
+                </a>
+              ) : <div />}
+              {nextPost ? (
+                <a href={`/blog/${nextPost.id}`} class="post-nav-card post-nav-card--next">
+                  <span class="post-nav-dir">
+                    Next
+                    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><line x1="5" y1="12" x2="19" y2="12" /><polyline points="12 5 19 12 12 19" /></svg>
+                  </span>
+                  <span class="post-nav-title">{nextPost.data.title}</span>
+                </a>
+              ) : <div />}
             </div>
-            <figcaption class="app-preview-text">
-              <span class="app-preview-badge">Hanyu App</span>
-              <p>See how this works in practice — from characters to conversation.</p>
-              <a class="app-preview-cta" href="https://apps.apple.com/vn/app/hanyu-app/id6759315453" target="_blank" rel="noopener noreferrer">
-                Download free
-                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M7 17l9.2-9.2M17 17V7H7" /></svg>
-              </a>
-            </figcaption>
-          </figure>
+          </nav>
         )}
-      </article>
+      </div>
+
+      <!-- TOC Sidebar -->
+      {tocHeadings.length > 0 && (
+        <aside class="toc-sidebar" aria-label="Table of contents">
+          <div class="toc-sticky">
+            <span class="toc-label">Jump to</span>
+            <ul class="toc-list">
+              {tocHeadings.map((h) => (
+                <li><a href={`#${h.slug}`} class="toc-link">{h.text}</a></li>
+              ))}
+            </ul>
+          </div>
+        </aside>
+      )}
     </div>
   </main>
   <Footer />
 </Layout>
 
+<script>
+  const tocLinks = document.querySelectorAll<HTMLAnchorElement>('.toc-link');
+  if (tocLinks.length > 0) {
+    const headingIds = Array.from(tocLinks).map((a) => a.hash.slice(1));
+    const headings = headingIds.map((id) => document.getElementById(id)).filter(Boolean) as HTMLElement[];
+
+    const tocArray = Array.from(tocLinks);
+    const observer = new IntersectionObserver(
+      (entries) => {
+        for (const entry of entries) {
+          if (entry.isIntersecting) {
+            tocLinks.forEach((a) => a.classList.remove('active'));
+            const active = tocArray.find((a) => a.hash === `#${entry.target.id}`);
+            active?.classList.add('active');
+          }
+        }
+      },
+      { rootMargin: '0px 0px -70% 0px', threshold: 0 }
+    );
+
+    headings.forEach((h) => observer.observe(h));
+  }
+</script>
+
 <style>
   .blog-post .container {
-    max-width: 720px;
+    max-width: 1000px;
+  }
+
+  /* ── Article Layout (prose + TOC sidebar) ──────────────── */
+  .article-layout {
+    display: grid;
+    grid-template-columns: minmax(0, 720px) 200px;
+    gap: 48px;
+    max-width: 1000px;
+    margin: 0 auto;
+    padding: 0 var(--page-gutter, 24px);
+  }
+
+  .article-main {
+    min-width: 0;
+  }
+
+  @media (max-width: 1080px) {
+    .blog-post .container {
+      max-width: 720px;
+    }
+
+    .article-layout {
+      grid-template-columns: 1fr;
+      max-width: 720px;
+      gap: 0;
+    }
+
+    .toc-sidebar {
+      display: none;
+    }
   }
 
   /* ── Hero Section ────────────────────────────────────────── */
@@ -154,6 +258,7 @@ const jsonLd = {
 
   /* ── Post Header ─────────────────────────────────────────── */
   .post-header {
+    max-width: 720px;
     margin-bottom: 32px;
   }
 
@@ -454,6 +559,132 @@ const jsonLd = {
 
   .app-preview--landscape .app-preview-badge {
     margin: 0 auto;
+  }
+
+  /* ── TOC Sidebar ────────────────────────────────────────── */
+  .toc-sticky {
+    position: sticky;
+    top: 100px;
+  }
+
+  .toc-label {
+    font-size: 10px;
+    font-weight: 700;
+    letter-spacing: 1px;
+    text-transform: uppercase;
+    color: var(--color-text-secondary);
+    display: block;
+    margin-bottom: 12px;
+  }
+
+  .toc-list {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+    border-left: 1px solid rgba(0, 0, 0, 0.06);
+  }
+
+  .toc-link {
+    display: block;
+    font-size: 13px;
+    line-height: 1.4;
+    color: var(--color-text-secondary);
+    text-decoration: none;
+    padding: 6px 0 6px 16px;
+    margin-left: -1px;
+    border-left: 2px solid transparent;
+    transition: color 0.15s ease, border-color 0.15s ease;
+  }
+
+  .toc-link:hover {
+    color: var(--color-text);
+  }
+
+  .toc-link.active {
+    color: var(--color-primary);
+    border-left-color: var(--color-primary);
+    font-weight: 700;
+  }
+
+  .toc-link:focus-visible {
+    outline: 2px solid var(--color-primary);
+    outline-offset: 2px;
+    border-radius: 2px;
+  }
+
+  /* ── Post Navigation (Next / Previous) ─────────────────── */
+  .post-nav {
+    border-top: 1px solid rgba(0, 0, 0, 0.06);
+    padding-top: 32px;
+    margin-bottom: var(--section-padding);
+  }
+
+  .post-nav-label {
+    font-size: 10px;
+    font-weight: 700;
+    letter-spacing: 1px;
+    text-transform: uppercase;
+    color: var(--color-text-secondary);
+    display: block;
+    margin-bottom: 16px;
+  }
+
+  .post-nav-links {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 16px;
+  }
+
+  .post-nav-card {
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+    padding: 16px;
+    background: var(--color-bg-alt);
+    border-radius: 14px;
+    text-decoration: none;
+    box-shadow: 0 2px 6px rgba(0, 0, 0, 0.04);
+    transition: box-shadow 0.15s ease, transform 0.1s ease;
+  }
+
+  .post-nav-card:hover {
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+    transform: translateY(-1px);
+  }
+
+  .post-nav-card:focus-visible {
+    outline: 2px solid var(--color-primary);
+    outline-offset: 2px;
+  }
+
+  .post-nav-dir {
+    display: inline-flex;
+    align-items: center;
+    gap: 4px;
+    font-size: 12px;
+    font-weight: 700;
+    color: var(--color-text-secondary);
+  }
+
+  .post-nav-card--next {
+    text-align: right;
+  }
+
+  .post-nav-card--next .post-nav-dir {
+    justify-content: flex-end;
+  }
+
+  .post-nav-title {
+    font-size: 14px;
+    font-weight: 700;
+    color: var(--color-text);
+    line-height: 1.3;
+  }
+
+  @media (max-width: 600px) {
+    .post-nav-links {
+      grid-template-columns: 1fr;
+    }
   }
 
   /* Mobile: always stack */
